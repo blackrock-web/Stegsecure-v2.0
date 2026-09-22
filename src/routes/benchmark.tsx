@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, PageHeader } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { encodeWithModel, MODELS } from "@/lib/stego/models";
 import { fileToImage } from "@/lib/stego/pixels";
 import { METRIC_KEYS } from "@/lib/stego/metrics";
 import { useSession, type BenchRow } from "@/lib/session";
+import { generateSampleImage } from "@/lib/stego/samples";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/benchmark")({ component: BenchmarkPage });
@@ -21,7 +22,7 @@ function BenchmarkPage() {
 
   async function run() {
     if (!files.length) {
-      setError("Upload one or more cover images.");
+      setError("Upload one or more cover images or use the sample suite button below.");
       return;
     }
     setBusy(true);
@@ -43,6 +44,60 @@ function BenchmarkPage() {
           } catch (e) {
             rows.push({
               imageName: file.name,
+              modelId: model.id,
+              metrics: {
+                psnr: 0,
+                ssim: 0,
+                mse: 1e9,
+                ber: 1,
+                recovery: false,
+                payloadBits: 0,
+                bpp: 0,
+                lsbChangePct: 100,
+                encodeMs: 0,
+                decodeMs: 0,
+                distortion: 1e9,
+              },
+              recovered: "",
+              error: e instanceof Error ? e.message : "failed",
+            });
+          }
+        }
+      }
+      setBench(rows);
+    } finally {
+      setBusy(false);
+      setProgress("");
+    }
+  }
+
+  async function runSampleSuite() {
+    setBusy(true);
+    setError(null);
+    const rows: BenchRow[] = [];
+    try {
+      const types: ("portrait" | "texture" | "peppers" | "geometric")[] = [
+        "portrait",
+        "texture",
+        "peppers",
+        "geometric",
+      ];
+      for (const t of types) {
+        const name = `Sample_${t.toUpperCase()}.png`;
+        const cover = generateSampleImage(t, 384, 384);
+        for (const model of MODELS) {
+          setProgress(`${name} · ${model.short}`);
+          try {
+            const out = await encodeWithModel(model, cover, benchSecret, benchPassword);
+            rows.push({
+              imageName: name,
+              modelId: model.id,
+              metrics: out.metrics,
+              recovered: out.recovered,
+            });
+          } catch (e) {
+            rows.push({
+              imageName: name,
               modelId: model.id,
               metrics: {
                 psnr: 0,
@@ -119,10 +174,38 @@ function BenchmarkPage() {
           </div>
         </div>
         {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
-        <Button className="mt-5" disabled={busy} onClick={run}>
-          {busy ? progress || "Running…" : "Run six-model comparison"}
-        </Button>
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          <Button disabled={busy} onClick={run}>
+            {busy ? progress || "Running…" : "Run comparison on uploaded images"}
+          </Button>
+          <Button variant="outline" disabled={busy} onClick={runSampleSuite}>
+            Run 4 Standard Covers (Portrait, Texture, Peppers, Geometric)
+          </Button>
+          {bench.length >= 12 && (
+            <Button variant="secondary" asChild>
+              <Link to="/statistics">
+                Analyze with Friedman / Kendall / Nemenyi →
+              </Link>
+            </Button>
+          )}
+        </div>
       </section>
+
+      {bench.length >= 12 && (
+        <div className="mb-8 rounded-xl border border-primary/20 bg-primary/8 p-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-semibold text-primary">Benchmark Data Available for Statistical Testing</h3>
+            <p className="text-xs text-muted-foreground">
+              {images.length} images evaluated across 6 algorithms. Compute the Friedman Test, Kendall's W Effect Size, and Nemenyi post-hoc Critical Differences.
+            </p>
+          </div>
+          <Button size="sm" asChild>
+            <Link to="/statistics">
+              Open Statistical Analysis Suite →
+            </Link>
+          </Button>
+        </div>
+      )}
 
       {images.map((name) => {
         const winner = winnerFor(name);

@@ -1,0 +1,6 @@
+{
+  "name": "ARES Stego Lab",
+  "description": "Desktop-style lab for ARES-Hybrid-INN encoding, decoding, six-model benchmarks, and rank statistics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
