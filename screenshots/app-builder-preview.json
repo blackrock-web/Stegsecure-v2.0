@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "ARES Stego Lab",
+      "hasCanvas": false,
+      "bodyTextLen": 508,
+      "bodyTextHash": "c418b4416b8c17c5ddd5a6e29fbad34810f756ec8493406ea41d5c6541dff093",
+      "bodyTextPrefix": "ARES Stego Lab Encoder Decoder Benchmark Statistics Models Light",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "ARES Stego Lab",
+      "hasCanvas": false,
+      "bodyTextLen": 542,
+      "bodyTextHash": "d53eac51eebdbb61c210dd6b47c0cbb3279a51a0f6883dde43fecfe1c5ca9a05",
+      "bodyTextPrefix": "ARES Stego Lab EncoderDecoderBenchmarkStatisticsModels Light wor",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

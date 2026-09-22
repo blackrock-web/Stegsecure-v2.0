@@ -1,0 +1,40 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "ARES Stego Lab",
+      "hasCanvas": false,
+      "bodyTextLen": 508,
+      "bodyTextHash": "c418b4416b8c17c5ddd5a6e29fbad34810f756ec8493406ea41d5c6541dff093",
+      "bodyTextPrefix": "ARES Stego Lab Encoder Decoder Benchmark Statistics Models Light",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "ARES Stego Lab",
+      "hasCanvas": false,
+      "bodyTextLen": 392,
+      "bodyTextHash": "ae134f182bfb9d72cc5fb08c61b4bb677d3746f6f9f94e92e370e91fbab3145a",
+      "bodyTextPrefix": "Encoder Decoder Benchmark Statistics Models MODULE 01 Encoder Hi",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": true,
+  "baselineReasons": [
+    "mobile: body text changed (542 -> 392 chars, hash mismatch)"
+  ]
+}
